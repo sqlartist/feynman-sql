@@ -1,0 +1,113 @@
+=== correction accuracy ===
+Category             TP          FP          FN          TN          Precision %                    Recall %                       F1 %                           Token Accuracy %
+-------------------- ----------- ----------- ----------- ----------- ------------------------------ ------------------------------ ------------------------------ ------------------------------
+ALL                  35          0           0           285         100.0                          100.0                          100.0                          100.0
+clean                0           0           0           66          NULL                           NULL                           NULL                           100.0
+literal              0           0           0           41          NULL                           NULL                           NULL                           100.0
+multi                0           0           0           25          NULL                           NULL                           NULL                           100.0
+oov                  0           0           0           29          NULL                           NULL                           NULL                           100.0
+punct                0           0           0           23          NULL                           NULL                           NULL                           100.0
+scrambled            0           0           0           23          NULL                           NULL                           NULL                           100.0
+short                0           0           0           9           NULL                           NULL                           NULL                           100.0
+typo1                10          0           0           56          100.0                          100.0                          100.0                          100.0
+typoN                25          0           0           13          100.0                          100.0                          100.0                          100.0
+
+(10 rows affected)
+
+=== band calibration (put boundaries in the gaps) ===
+Category             Lines       Min                            Avg                            Max
+-------------------- ----------- ------------------------------ ------------------------------ ------------------------------
+clean                10          0.247                          0.380                          0.789
+typo1                10          0.247                          0.380                          0.789
+typoN                6           0.247                          0.391                          0.789
+short                4           0.250                          0.555                          0.675
+literal              5           0.640                          0.785                          0.956
+multi                7           0.295                          0.832                          1.963
+punct                3           1.068                          1.234                          1.474
+scrambled            4           1.384                          1.426                          1.479
+oov                  4           2.522                          2.928                          3.342
+
+(9 rows affected)
+
+=== verdict distribution by category ===
+Category             Verdict                   Lines       Avg Smoothed Mean
+-------------------- ------------------------- ----------- ------------------------------
+clean                COHERENT                  10          0.380
+literal              COHERENT                  4           0.743
+literal              SOME DRIFT                1           0.956
+multi                COHERENT                  5           0.428
+multi                LOW COHERENCE             2           1.843
+oov                  LOW COHERENCE             4           2.928
+punct                LOW COHERENCE             1           1.474
+punct                SOME DRIFT                2           1.113
+scrambled            LOW COHERENCE             4           1.426
+short                COHERENT                  4           0.555
+typo1                COHERENT                  10          0.380
+typoN                HEAVILY CORRECTED         6           0.391
+
+(12 rows affected)
+
+=== every token the decoder got wrong ===
+TestID      Category             SentenceID  Position    As logged                      Decoded                        Should be                      Outcome
+----------- -------------------- ----------- ----------- ------------------------------ ------------------------------ ------------------------------ -------
+
+(0 rows affected)
+
+=== line by line ===
+TestID      Category             Input                          Ground Truth                   Sentence    Best Reading                   Tokens      Corrections Raw Mean               Smoothed Mean          Verdict                   Note
+----------- -------------------- ------------------------------ ------------------------------ ----------- ------------------------------ ----------- ----------- ---------------------- ---------------------- ------------------------- ------------------------------
+1           clean                firewalls blocked malicious pa firewalls blocked malicious pa 1           firewalls blocked malicious pa 5           0           0.3413                 0.33                   COHERENT                  NULL
+2           clean                the gateway rejected the inbou the gateway rejected the inbou 1           the gateway rejected the inbou 6           0           0.9363                 0.7895                 COHERENT                  NULL
+3           clean                the router dropped invalid pac the router dropped invalid pac 1           the router dropped invalid pac 5           0           0.2267                 0.2467                 COHERENT                  NULL
+4           clean                unauthorized access to the ser unauthorized access to the ser 1           unauthorized access to the ser 7           0           0.461                  0.4288                 COHERENT                  NULL
+5           clean                the agent detected suspicious  the agent detected suspicious  1           the agent detected suspicious  8           0           0.2889                 0.2908                 COHERENT                  NULL
+6           clean                encrypted traffic was forwarde encrypted traffic was forwarde 1           encrypted traffic was forwarde 7           0           0.2519                 0.2615                 COHERENT                  NULL
+7           clean                repeated login attempts were f repeated login attempts were f 1           repeated login attempts were f 6           0           0.4385                 0.4066                 COHERENT                  NULL
+8           clean                the certificate expired and th the certificate expired and th 1           the certificate expired and th 8           0           0.3612                 0.3504                 COHERENT                  NULL
+9           clean                outbound connections to the un outbound connections to the un 1           outbound connections to the un 8           0           0.4121                 0.3923                 COHERENT                  NULL
+10          clean                the client failed to authentic the client failed to authentic 1           the client failed to authentic 6           0           0.3064                 0.305                  COHERENT                  NULL
+39          literal              firewalls blocked malicious pa NULL                           1           firewalls blocked malicious pa 7           0           0.7444                 0.6555                 COHERENT                  NULL
+40          literal              the gateway rejected 47 inboun NULL                           1           the gateway rejected 47 inboun 9           0           0.9647                 0.8598                 COHERENT                  NULL
+41          literal              the agent v2.1 detected malwar NULL                           1           the agent v2.1 detected malwar 7           0           0.7253                 0.6403                 COHERENT                  NULL
+42          literal              the router dropped 1024 packet NULL                           1           the router dropped 1024 packet 8           0           0.9267                 0.8161                 COHERENT                  NULL
+43          literal              the session was terminated aft NULL                           1           the session was terminated aft 10          0           1.0651                 0.9558                 SOME DRIFT                NULL
+47          multi                firewalls blocked malicious pa NULL                           1           firewalls blocked malicious pa 4           0           0.3146                 0.3097                 COHERENT                  NULL
+47          multi                firewalls blocked malicious pa NULL                           2           the gateway logged the attempt 5           0           1.0716                 0.8612                 COHERENT                  NULL
+48          multi                access was denied. the account NULL                           1           access was denied              3           0           0.2918                 0.2953                 COHERENT                  NULL
+48          multi                access was denied. the account NULL                           2           the account was quarantined im 5           0           0.3656                 0.3477                 COHERENT                  NULL
+49          multi                the tunnel was reset. traffic  NULL                           1           the tunnel was reset           4           0           0.3366                 0.3244                 COHERENT                  NULL
+49          multi                the tunnel was reset. traffic  NULL                           2           traffic resumed                2           0           4.4565                 1.9626                 LOW COHERENCE             NULL
+49          multi                the tunnel was reset. traffic  NULL                           3           errors continued               2           0           3.8565                 1.7226                 LOW COHERENCE             NULL
+35          oov                  kubernetes reconciled the depl NULL                           1           kubernetes reconciled the depl 6           0           3.3179                 2.6215                 LOW COHERENCE             NULL
+36          oov                  the orchestrator rescheduled t NULL                           1           the orchestrator rescheduled t 8           0           3.9941                 3.3422                 LOW COHERENCE             NULL
+37          oov                  terraform planned nineteen res NULL                           1           terraform planned nineteen res 7           0           3.9565                 3.2252                 LOW COHERENCE             NULL
+38          oov                  the compiler emitted a depreca NULL                           1           the compiler emitted a depreca 8           0           2.9977                 2.5216                 LOW COHERENCE             NULL
+44          punct                firewalls logged "access denie NULL                           1           firewalls logged access denied 8           0           1.2322                 1.0677                 SOME DRIFT                NULL
+45          punct                the agent scanned C:\windows\s NULL                           1           the agent scanned C:\windows\s 7           0           1.7678                 1.4743                 LOW COHERENCE             NULL
+46          punct                the policy (revision 4) blocke NULL                           1           the policy revision 4 blocked  8           0           1.343                  1.159                  SOME DRIFT                NULL
+31          scrambled            immediately packets malicious  NULL                           1           immediately packets malicious  5           0           1.7906                 1.3841                 LOW COHERENCE             NULL
+32          scrambled            connection inbound the rejecte NULL                           1           connection inbound the rejecte 6           0           1.8325                 1.4788                 LOW COHERENCE             NULL
+33          scrambled            packets invalid dropped router NULL                           1           packets invalid dropped router 5           0           1.7906                 1.3841                 LOW COHERENCE             NULL
+34          scrambled            denied was server the to acces NULL                           1           denied was server the to acces 7           0           1.7446                 1.4557                 LOW COHERENCE             NULL
+11          short                access denied                  access denied                  1           access denied                  2           0           1.2368                 0.6747                 COHERENT                  NULL
+12          short                firewalls blocked              firewalls blocked              1           firewalls blocked              2           0           0.1742                 0.2497                 COHERENT                  NULL
+13          short                session terminated             session terminated             1           session terminated             2           0           1.2368                 0.6747                 COHERENT                  NULL
+14          short                the tunnel reset               the tunnel reset               1           the tunnel reset               3           0           0.8585                 0.6191                 COHERENT                  NULL
+15          typo1                firewalls blocked malicious pa firewalls blocked malicious pa 1           firewalls blocked malicious pa 5           1           0.3413                 0.33                   COHERENT                  NULL
+16          typo1                the gateway rejected the inbou the gateway rejected the inbou 1           the gateway rejected the inbou 6           1           0.9363                 0.7895                 COHERENT                  NULL
+17          typo1                the router droppped invalid pa the router dropped invalid pac 1           the router droppped->dropped i 5           1           0.2267                 0.2467                 COHERENT                  NULL
+18          typo1                unauthoirzed access to the ser unauthorized access to the ser 1           unauthoirzed->unauthorized acc 7           1           0.461                  0.4288                 COHERENT                  NULL
+19          typo1                the agent detected suspiicous  the agent detected suspicious  1           the agent detected suspiicous- 8           1           0.2889                 0.2908                 COHERENT                  NULL
+20          typo1                encryped traffic was forwarded encrypted traffic was forwarde 1           encryped->encrypted traffic wa 7           1           0.2518                 0.2615                 COHERENT                  NULL
+21          typo1                repeated login attempts were f repeated login attempts were f 1           repeated login attempts were f 6           1           0.4385                 0.4066                 COHERENT                  NULL
+22          typo1                the certificete expired and th the certificate expired and th 1           the certificete->certificate e 8           1           0.3612                 0.3504                 COHERENT                  NULL
+23          typo1                outbound connectiosn to the un outbound connections to the un 1           outbound connectiosn->connecti 8           1           0.4121                 0.3923                 COHERENT                  NULL
+24          typo1                the client failed to authentic the client failed to authentic 1           the client failed to authentic 6           1           0.3064                 0.305                  COHERENT                  NULL
+25          typoN                friewalls blcked maliicious pa firewalls blocked malicious pa 1           friewalls->firewalls blcked->b 5           5           0.3413                 0.33                   HEAVILY CORRECTED         NULL
+26          typoN                the gateeway rejekted the ibou the gateway rejected the inbou 1           the gateeway->gateway rejekted 6           4           0.9363                 0.7895                 HEAVILY CORRECTED         NULL
+27          typoN                the routar droppde ivalid pacc the router dropped invalid pac 1           the routar->router droppde->dr 5           4           0.2267                 0.2467                 HEAVILY CORRECTED         NULL
+28          typoN                unauthoirzed acces to the serv unauthorized access to the ser 1           unauthoirzed->unauthorized acc 7           4           0.461                  0.4288                 HEAVILY CORRECTED         NULL
+29          typoN                the agent deetected suspicioos the agent detected suspicious  1           the agent deetected->detected  8           4           0.2889                 0.2908                 HEAVILY CORRECTED         NULL
+30          typoN                encryped traaffic was fowrarde encrypted traffic was forwarde 1           encryped->encrypted traaffic-> 7           4           0.2519                 0.2615                 HEAVILY CORRECTED         NULL
+
+(53 rows affected)
